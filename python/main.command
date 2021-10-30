@@ -6,6 +6,6 @@ Packages
 import interface as int
 
 """
-Launch
+Launchable script on mac with double click
 """
 int.open_main_window()

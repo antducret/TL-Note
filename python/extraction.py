@@ -4,25 +4,19 @@ import debug as db
 import re
 
 def weekday(d,m,y):
+    """ return the first french letter for each weekday """
     date = dt.datetime(int(y),int(m),int(d))
     letters = ["L","M","W","J","V","S","D"]
     return letters[date.weekday()]
 
 def pdf2text(path):
-    """
-    Return a text file from pdf
-    """
+    """ return a text file from pdf """
     text = tx.process(path)
-    text = text.decode("utf-8")
-    return text
+    return text.decode("utf-8")
 
 def extract_data(path):
-    """
-    Extract all data from a pdf returning a dict
-    """
+    """ extract all data from a pdf returning a dictionary """
     txt = pdf2text(path)
-    tab = txt.split("\n")
-    tab = [x for x in tab if x]
     data = dict()
 
     date = re.search('\d{2}/\d{2}/\d{4}', txt)[0]

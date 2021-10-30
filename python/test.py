@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 import config as cf
 import debug as db
+import extraction as ext
 import moresimplenote as msn
 import simplenote as sn
 
 
 # control a particular pdf file
-if 0 :
+if 0:
     m = 11
     d = 11
 
@@ -14,11 +15,12 @@ if 0 :
     d = "0" + str(d) if len(str(d)) == 1 else str(d)
 
     path = "./pers/INPUT/{}-{}.pdf".format(m,d)
-    print(pdf2text(path))
-    db.print_data(extract_data(path))
+    print(ext.pdf2text(path))
+    db.print_data(ext.extract_data(path))
 
 # add folder of cards
-if 0 :
+if 1:
     id =  cf.get_id()
     id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
-    msn.add_agentcard(id_SN,"./pers/INPUT/",DEBUG = db.debug)
+    config_data = cf.get_config()
+    msn.add_agentcard("./pers/INPUT/",config_data,id_SN,DEBUG = db.debug)
