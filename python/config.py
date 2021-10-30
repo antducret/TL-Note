@@ -5,7 +5,7 @@ upload = 0
 
 def get_config():
 
-    filename="./Configuration/config.csv"
+    filename="./config/config.csv"
     config_data = dict()
 
     with open(filename,'r') as data:
@@ -20,7 +20,7 @@ def print_cf():
 
 def get_id():
 
-    filename="./Configuration/id.csv"
+    filename="./pers/id.csv"
     id = dict()
 
     with open(filename,'r') as data:

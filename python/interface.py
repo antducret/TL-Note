@@ -54,7 +54,3 @@ def open_main_window():
             webbrowser.open('https://app.simplenote.com/', new = 2)
         elif event == "-CONFIG-":
                 window['-OUTPUT-'].update("Cette fonctionnalité n'est pas encore implémentée")
-
-id =  cf.get_id()
-id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
-msn.add_agentcard(id_SN,"./tmp/1.INPUT/",DEBUG = db.debug)

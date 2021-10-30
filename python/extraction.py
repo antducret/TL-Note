@@ -3,14 +3,6 @@ import datetime as dt
 import debug as db
 import re
 
-
-
-path_main = "./tmp/"
-path_input      = path_main + "1.INPUT/"
-path_text   = path_main + "2.TXT/"
-path_tab    = path_main + "3.TAB/"
-path_output     = path_main + "4.OUTPUT/"
-
 def weekday(d,m,y):
     date = dt.datetime(int(y),int(m),int(d))
     letters = ["L","M","W","J","V","S","D"]
@@ -92,15 +84,3 @@ def extract_data(path):
     data["SOURCE"] = re.search('\d{2}/\d{2}/\d{4} \d{2}:\d{2}', [x for x in txt.split("\n") if "HASTUS" in x][0])[0]
 
     return data
-
-
-#--------_DEBUG_--------
-m = 11
-d = 11
-
-m = "0" + str(m) if len(str(m)) == 1 else str(m)
-d = "0" + str(d) if len(str(d)) == 1 else str(d)
-
-path = "./tmp/1.INPUT/{}-{}.pdf".format(m,d)
-print(pdf2text(path))
-db.print_data(extract_data(path))
