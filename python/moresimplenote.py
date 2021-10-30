@@ -6,12 +6,12 @@ import extraction as ex
 
 def add_break(d,m,y,type,config_data,id_SN):
     """ upload a note for breakday on simple note"""
-    note = cn.construct_break(d,m,y,type)
+    note = cn.construct_break(d,m,y,type,config_data)
     if cf.UPLOAD : id_SN.add_note(note)
 
 def add_holiday(d0,m0,y0,d1,m1,y1,config_data,id_SN):
     """ upload a note for holiday on simple note"""
-    notes = cn.construct_holidays(d0,m0,y0,d1,m1,y1)
+    notes = cn.construct_holidays(d0,m0,y0,d1,m1,y1,config_data)
     for note in notes :
         if cf.UPLOAD : id_SN.add_note(note)
 

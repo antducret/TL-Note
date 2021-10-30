@@ -18,18 +18,44 @@ def open_main_window():
 
     sg.theme('Reddit')
     layout = [
-            [sg.Text("")],
-            [sg.Text("Dossier des cartes agents : "),
+            [
+            sg.Text("")],
+            [
+            sg.Text("Dossier des cartes agents : "),
             sg.InputText(key="-INPUT-"),sg.FolderBrowse(key="-FOLDER-"),
             sg.Button("Ajouter",key="-SUBMITCARD-")],
-            [sg.Text("")],
-            [sg.Text("Congés : "),sg.Listbox(["C","R","RR"],size=(4,4),key="-BREAKTYPE-"),sg.T("Date (JJ/MM/AAAA)"),sg.Listbox(date_number,size=(4,4),key="-BREAKDAY-"),sg.Listbox(date_number[:12],size=(4,4),key="-BREAKMONTH-"),sg.Listbox(year_number,size=(4,4),key="-BREAKYEAR-"),sg.Button("Ajouter",key="-SUBMITBREAK-")],
-            [sg.Text("")],
-            [sg.Text("Vacances : "),sg.T("Début (JJ/MM/AAAA)"),sg.Listbox(date_number,size=(4,4),key="-HOLIDAYDAY0-"),sg.Listbox(date_number[:12],size=(4,4),key="-HOLIDAYMONTH0-"),sg.Listbox(year_number,size=(4,4),key="-HOLIDAYYEAR0-"),sg.T("Fin (JJ/MM/AAAA)"),sg.Listbox(date_number,size=(4,4),key="-HOLIDAYDAY1-"),sg.Listbox(date_number[:12],size=(4,4),key="-HOLIDAYMONTH1-"),sg.Listbox(year_number,size=(4,4),key="-HOLIDAYYEAR1-"),sg.Button("Ajouter",key="-SUBMITHOLIDAY-")],
-            [sg.Button("Simplenote",key = "-SIMPLENOTE-"),sg.Button("Fichier de configuration",key = "-CONFIG-")],
-            [sg.T("")],
-            [sg.T(" TL-Note a bien démarré", background_color='lightblue',key = "-OUTPUT-")],
-            [sg.T("")]
+            [
+            sg.Text("")],
+            [
+            sg.Text("Congés : "),
+            sg.Listbox(["C","R","RR"],size=(4,4),key="-BREAKTYPE-"),
+            sg.T("Date (JJ/MM/AAAA)"),
+            sg.Listbox(date_number,size=(4,4),key="-BREAKDAY-"),
+            sg.Listbox(date_number[:12],size=(4,4),key="-BREAKMONTH-"),
+            sg.Listbox(year_number,size=(4,4),key="-BREAKYEAR-"),
+            sg.Button("Ajouter",key="-SUBMITBREAK-")],
+            [
+            sg.Text("")],
+            [
+            sg.Text("Vacances : "),
+            sg.T("Début (JJ/MM/AAAA)"),
+            sg.Listbox(date_number,size=(4,4),key="-HOLIDAYDAY0-"),
+            sg.Listbox(date_number[:12],size=(4,4),key="-HOLIDAYMONTH0-"),
+            sg.Listbox(year_number,size=(4,4),key="-HOLIDAYYEAR0-"),
+            sg.T("Fin (JJ/MM/AAAA)"),
+            sg.Listbox(date_number,size=(4,4),key="-HOLIDAYDAY1-"),
+            sg.Listbox(date_number[:12],size=(4,4),key="-HOLIDAYMONTH1-"),
+            sg.Listbox(year_number,size=(4,4),key="-HOLIDAYYEAR1-"),
+            sg.Button("Ajouter",key="-SUBMITHOLIDAY-")],
+            [
+            sg.Button("Simplenote",key = "-SIMPLENOTE-"),
+            sg.Button("Fichier de configuration",key = "-CONFIG-")],
+            [
+            sg.T("")],
+            [
+            sg.T(" TL-Note a bien démarré", background_color='lightblue',key = "-OUTPUT-")],
+            [
+            sg.T("")]
             ]
     window = sg.Window('TL-Note', layout, size=(800,450),element_justification='l',auto_size_text=True,
                        auto_size_buttons=True,resizable=True,grab_anywhere=False,border_depth=5,finalize=True)
@@ -39,18 +65,40 @@ def open_main_window():
         if event == sg.WIN_CLOSED:
             break
         elif event == "-SUBMITCARD-":
-            msn.add_agentcard(str(values["-FOLDER-"]),config_data,id_SN,DEBUG=db.debug)
-            window['-OUTPUT-'].update(" Cartes agents ajoutées à partir du dossier : "+str(values["-FOLDER-"]))
+            folder = str(values["-FOLDER-"])
+            msn.add_agentcard(folder,config_data,id_SN,DEBUG=db.debug)
+            window['-OUTPUT-'].update(" Cartes agents ajoutées à partir du dossier : "+folder)
         elif event == "-SUBMITBREAK-":
-            if ([] not in [values["-BREAKTYPE-"],values["-BREAKDAY-"],values["-BREAKMONTH-"],values["-BREAKYEAR-"]] ):
-                msn.add_break(values["-BREAKDAY-"],values["-BREAKMONTH-"],values["-BREAKYEAR-"],values["-BREAKTYPE-"],config_data,id_SN)
-                window['-OUTPUT-'].update(" Congé " +str(values["-BREAKTYPE-"])+" du "+str(values["-BREAKDAY-"])[2:-2]+"/"+str(values["-BREAKMONTH-"])[2:-2]+"/"+str(values["-BREAKYEAR-"])[2:-2]+" ajouté")
+            type_list = values["-BREAKTYPE-"]
+            day_list = values["-BREAKDAY-"]
+            month_list = values["-BREAKMONTH-"]
+            year_list = values["-BREAKYEAR-"]
+            if ([] not in [type_list,day_list,month_list,year_list]):
+                type = str(type_list)[2:-2]
+                day = str(day_list)[2:-2]
+                month = str(month_list)[2:-2]
+                year = str(year_list)[2:-2]
+                print(type,day,month,year)
+                msn.add_break(int(day),int(month),int(year),type,config_data,id_SN)
+                window['-OUTPUT-'].update(" Congé " +type+" du "+day+"/"+month+"/"+year+" ajouté")
             else:
                 window['-OUTPUT-'].update("Vérifiez que tout les données ont étées saisies (type, jour, mois, année)")
         elif event == "-SUBMITHOLIDAY-":
-            if ([] not in [values["-HOLIDAYDAY0-"],values["-HOLIDAYDAY1-"],values["-HOLIDAYMONTH0-"],values["-HOLIDAYMONTH1-"],values["-HOLIDAYYEAR0-"],values["-HOLIDAYYEAR1-"]] ):
-                msn.add_holiday(values["-HOLIDAYDAY0-"],values["-HOLIDAYMONTH0-"],values["-HOLIDAYYEAR0-"],values["-HOLIDAYDAY1-"],values["-HOLIDAYMONTH1-"],values["-HOLIDAYYEAR1-"],config_data,id_SN)
-                window['-OUTPUT-'].update(" Vacances du "+str(values["-HOLIDAYDAY0-"])[2:-2]+"/"+str(values["-HOLIDAYMONTH0-"])[2:-2]+"/"+str(values["-HOLIDAYYEAR0-"])[2:-2]+" au "+str(values["-HOLIDAYDAY1-"])[2:-2]+"/"+str(values["-HOLIDAYMONTH1-"])[2:-2]+"/"+str(values["-HOLIDAYYEAR1-"])[2:-2]+" ajoutées")
+            day0 = values["-HOLIDAYDAY0-"]
+            month0 = values["-HOLIDAYMONTH0-"]
+            year0 = values["-HOLIDAYYEAR0-"]
+            day1 = values["-HOLIDAYDAY1-"]
+            month1 = values["-HOLIDAYMONTH1-"]
+            year1 = values["-HOLIDAYYEAR1-"]
+            if ([] not in [day0,day1,month0,month1,year0,year1] ):
+                day0 = str(values["-HOLIDAYDAY0-"])[2:-2]
+                month0 = str(values["-HOLIDAYMONTH0-"])[2:-2]
+                year0 = str(values["-HOLIDAYYEAR0-"])[2:-2]
+                day1 = str(values["-HOLIDAYDAY1-"])[2:-2]
+                month1 = str(values["-HOLIDAYMONTH1-"])[2:-2]
+                year1 = str(values["-HOLIDAYYEAR1-"])[2:-2]
+                msn.add_holiday(int(day0),int(month0),int(year0),int(day1),int(month1),int(year1),config_data,id_SN)
+                window['-OUTPUT-'].update(" Vacances du "+day0+"/"+month0+"/"+year0+" au "+day1+"/"+month1+"/"+year1+" ajoutées")
             else:
                 window['-OUTPUT-'].update("Vérifiez que tout les données ont étées saisies ( jour, mois, année) pour le début et la fin des vacances")
         elif event == "-SIMPLENOTE-":

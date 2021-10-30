@@ -5,11 +5,11 @@ import datetime as dt
 
 def construct_break(d,m,y,t,config_data):
     """ return a string named note formated for break day"""
-    d = str(d)[2:-2]
-    m = str(m)[2:-2]
-    y = str(y)[2:-2]
-    t = str(t)[2:-2]
     l = ext.weekday(d,m,y)
+    d = cf.int2digit(d)
+    m = cf.int2digit(m)
+    y = str(y)
+    t = str(t)
     logo = cf.get_logo("CONGE",config_data)
     return "{}-{} {} {} \n\n {}".format(d,m,l,logo,t)
 
@@ -26,19 +26,12 @@ def construct_holiday(date,config_data):
 
 def construct_holidays(d0,m0,y0,d1,m1,y1,config_data):
     """ return a list of notes formated for holiday days"""
-    d0 = int(str(d0)[2:-2])
-    m0 = int(str(m0)[2:-2])
-    y0 = int(str(y0)[2:-2])
-    d1 = int(str(d1)[2:-2])
-    m1 = int(str(m1)[2:-2])
-    y1 = int(str(y1)[2:-2])
     notes = []
     date0 = dt.datetime(y0,m0,d0)
     date1 = dt.datetime(y1,m1,d1)
     date = date0
-
     while (date != (date1 + dt.timedelta(days=1))):
-        notes.append(construct_holiday(date),config_data)
+        notes.append(construct_holiday(date,config_data))
         date += dt.timedelta(days=1)
     return notes
 
@@ -55,14 +48,14 @@ def isLogo(key,data,config_data):
         "MIDI" :(h_i>= int(config_data["H_MIDI"][0]) and h_i< int(config_data["H_APREM"][0])),
         "APREM" :(h_i>= int(config_data["H_APREM"][0]) and h_i< int(config_data["H_NUIT"][0]) and h_f < 24),
         "NUIT" : (h_i>= int(config_data["H_NUIT"][0]) or h_f>=24),
-        "1":any(key in v_list for key in config_data["L1"]),
-        "9":any(key in v_list for key in config_data["9"]),
-        "12":any(key in v_list for key in config_data["12"]),
-        "17":any(key in v_list for key in config_data["17"]),
-        "42":any(key in v_list for key in config_data["42"]),
-        "54":any(key in v_list for key in config_data["54"]),
-        "58":any(key in v_list for key in config_data["58"]),
-        "60":any(key in v_list for key in config_data["60"]),
+        "1": any(key in v_list for key in config_data["L1"]),
+        "9": any(key in v_list for key in config_data["L9"]),
+        "12":any(key in v_list for key in config_data["L12"]),
+        "17":any(key in v_list for key in config_data["L17"]),
+        "42":any(key in v_list for key in config_data["L42"]),
+        "54":any(key in v_list for key in config_data["L54"]),
+        "58":any(key in v_list for key in config_data["L58"]),
+        "60":any(key in v_list for key in config_data["L60"]),
     }.get(key, False)
 
 def update_logo(logo,key,data,config_data):
