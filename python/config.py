@@ -30,3 +30,8 @@ def get_id():
 def get_logo(key,config_data):
     """ return the string "emoji" corresponding to the CLDR code at config_data[key]  """
     return emoji.emojize(config_data[key][0])
+
+def int2digit(int):
+    """ return a double digit string of an int """
+    string = int = "0"+str(int) if len(str(int)) == 1 else str(int)
+    return string

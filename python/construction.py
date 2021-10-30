@@ -18,11 +18,11 @@ def construct_holiday(date,config_data):
     d = date.day
     m = date.month
     y = date.year
+    d_s = cf.int2digit(d)
+    m_s = cf.int2digit(m)
     l = ext.weekday(d,m,y)
-    d = "0"+str(d) if len(str(d)) == 1 else str(d)
-    m = "0"+str(m) if len(str(m)) == 1 else str(m)
     logo = cf.get_logo("VACANCE",config_data)
-    return "{}-{} {} {}️".format(d,m,l,logo)
+    return "{}-{} {} {}️".format(d_s,m_s,l,logo)
 
 def construct_holidays(d0,m0,y0,d1,m1,y1,config_data):
     """ return a list of notes formated for holiday days"""
@@ -81,12 +81,11 @@ def make_logo(data,config_data):
 
 def make_title(data,config_data):
     """ return a note title with this format : MM-DD WEEKDAY_LETTER LOGO START_HOUR START_PLACE    """
-    month_tmp = "0" + str(data["MONTH"]) if len(str(data["MONTH"])) == 1 else str(data["MONTH"])
-    day_tmp = "0" + str(data["DAY"]) if len(str(data["DAY"])) == 1 else str(data["DAY"])
-    M_D = month_tmp+"-"+day_tmp
+    month = cf.int2digit(data["MONTH"])
+    day = cf.int2digit(data["DAY"])
+    M_D = month+"-"+day
     logo = make_logo(data, config_data)
     title = "{} {} {} {} {}\n".format(M_D,data["WEEKDAY"],logo,data["H_I"][0],data["L_I"][0])
-
     return title
 
 def make_summary(data,config_data):
@@ -100,13 +99,15 @@ def make_summary(data,config_data):
         ...
     -----"""
 
-    data["DAY"] = "0"+str(data["DAY"]) if len(str(data["DAY"])) == 1 else str(data["DAY"])
-    data["MONTH"] = "0"+str(data["MONTH"]) if len(str(data["MONTH"])) == 1 else str(data["MONTH"])
+    day = cf.int2digit(data["DAY"])
+    month = cf.int2digit(data["MONTH"])
     summary = "{TURN} {DAY}/{MONTH}/{YEAR}\n\n".format(**data)
-    if all((x != None and len(x)==len(data["CAR"]))  for x in [data["CAR"],data["P_I"],data["L_I"],data["H_I"],data["H_F"],data["L_F"],data["P_F"]]):
+
+    if all((section != None and len(section)==len(data["CAR"]))  for section in [data["CAR"],data["P_I"],data["L_I"],data["H_I"],data["H_F"],data["L_F"],data["P_F"]]):
         for i in range(len(data["CAR"])):
             summary += "{}\n{} {} {} {} {} {}\n".format(data["CAR"][i],data["P_I"][i],data["L_I"][i],data["H_I"][i],data["H_F"][i],data["L_F"][i],data["P_F"][i])
     else: summary = "_SUMMARY_INFEASIBLE"
+
     return summary
 
 def make_details(data,config_data):
