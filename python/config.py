@@ -1,35 +1,32 @@
 import csv
 import emoji
 
-upload = 0
+UPLOAD = 0
+CONFIG_FILE = "./config/config.csv"
+ID_FILE = "./pers/id.csv"
 
 def get_config():
-
-    filename="./config/config.csv"
+""" return a dictionary containing all the data in config.csv """
     config_data = dict()
-
-    with open(filename,'r') as data:
+    with open(CONFIG_FILE,'r') as data:
        for line in csv.reader(data,delimiter = ";"):
            config_data[line[0]]  = [x for x in line[1].split(',')]
     return config_data
 
 def print_cf():
+""" print all the data contained in config.csv """
     data = get_config()
     for i in data:
         print(i,(10-len(i))*" ",lg(i) if (data[i][0][0] == ":") else data[i])
 
 def get_id():
-
-    filename="./pers/id.csv"
+""" return a dictionary containing all the id data in id.csv"""
     id = dict()
-
-    with open(filename,'r') as data:
+    with open(ID_FILE,'r') as data:
        for line in csv.reader(data,delimiter = ";"):
             id[line[0]] = line[1].split(',')
     return id
 
-def lg(key):
-    data = get_config()
-    return emoji.emojize(data[key][0])
-
-#print_cf()
+def get_logo(config_data,key):
+""" return the string "emoji" corresponding to the CLDR code at config_data[key]  """
+    return emoji.emojize(config_data[key][0])
