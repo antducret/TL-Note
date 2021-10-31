@@ -11,9 +11,6 @@
   - Note to dict() (content and key ???) --> delete / update
   - Suppression note échue
   - Gestion des changement d'année dans le listing
-  - Mise à jour d'une note
-  - TAGS for each note
-
 
 - controler input
    - vacances : today <=date0 < date1

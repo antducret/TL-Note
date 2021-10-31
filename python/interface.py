@@ -15,6 +15,7 @@ def open_main_window():
     id =  cf.get_id()
     id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
     config_data = cf.get_config()
+    tags = cf.get_tags()
 
     sg.theme('Reddit')
     layout = [
@@ -66,7 +67,7 @@ def open_main_window():
             break
         elif event == "-SUBMITCARD-":
             folder = str(values["-FOLDER-"])
-            msn.add_agentcard(folder,config_data,id_SN,DEBUG=db.debug)
+            msn.add_agentcard(folder,config_data,tags,id_SN,DEBUG=db.debug)
             window['-OUTPUT-'].update(" Cartes agents ajoutées à partir du dossier : "+folder)
         elif event == "-SUBMITBREAK-":
             type_list = values["-BREAKTYPE-"]
@@ -79,7 +80,7 @@ def open_main_window():
                 month = str(month_list)[2:-2]
                 year = str(year_list)[2:-2]
                 print(type,day,month,year)
-                msn.add_break(int(day),int(month),int(year),type,config_data,id_SN)
+                msn.add_break(int(day),int(month),int(year),type,config_data,tags,id_SN)
                 window['-OUTPUT-'].update(" Congé " +type+" du "+day+"/"+month+"/"+year+" ajouté")
             else:
                 window['-OUTPUT-'].update("Vérifiez que tout les données ont étées saisies (type, jour, mois, année)")
@@ -97,7 +98,7 @@ def open_main_window():
                 day1 = str(values["-HOLIDAYDAY1-"])[2:-2]
                 month1 = str(values["-HOLIDAYMONTH1-"])[2:-2]
                 year1 = str(values["-HOLIDAYYEAR1-"])[2:-2]
-                if msn.add_holiday(int(day0),int(month0),int(year0),int(day1),int(month1),int(year1),config_data,id_SN):
+                if msn.add_holiday(int(day0),int(month0),int(year0),int(day1),int(month1),int(year1),config_data,tags,id_SN):
                     window['-OUTPUT-'].update(" Vacances du "+day0+"/"+month0+"/"+year0+" au "+day1+"/"+month1+"/"+year1+" ajoutées")
                 else:
                     window['-OUTPUT-'].update(" Veuillez inscire les dates dans l'ordres chronologiques")

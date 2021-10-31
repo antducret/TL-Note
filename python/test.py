@@ -19,8 +19,15 @@ if 0:
     db.print_data(ext.extract_data(path))
 
 # add folder of cards
-if 1:
+if 0:
     id =  cf.get_id()
     id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
     config_data = cf.get_config()
     msn.add_agentcard("./pers/INPUT/",config_data,id_SN,DEBUG = db.debug)
+
+# upload note
+if 0:
+    id =  cf.get_id()
+    id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
+    msn.upload_note("_NOTE_", "_DATE_", id_SN)
+    print(id_SN.get_note("_DATE_"))

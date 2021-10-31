@@ -1,9 +1,10 @@
 import csv
 import emoji
 
-UPLOAD = 0
+UPLOAD = 1
 CONFIG_FILE = "./config/config.csv"
 ID_FILE = "./pers/id.csv"
+TAGS_FILE = "./pers/tags.csv"
 
 def get_config():
     """ return a dictionary containing all the data in config.csv """
@@ -26,6 +27,14 @@ def get_id():
        for line in csv.reader(data,delimiter = ";"):
             id[line[0]] = line[1].split(',')
     return id
+
+def get_tags():
+    """ return a list containing all the tags in tags.csv"""
+    tags = []
+    with open(TAGS_FILE,'r') as data:
+        for line in csv.reader(data,delimiter = ";"):
+            tags.append(line)
+    return tags
 
 def get_logo(key,config_data):
     """ return the string "emoji" corresponding to the CLDR code at config_data[key]  """

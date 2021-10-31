@@ -115,6 +115,7 @@ def make_details(data,config_data):
 def construct_card(path,config_data,debug = False):
     """ return a note (string) from pdf file to upload on simplenote """
     data = ext.extract_data(path)
+    date = dt.datetime(data["YEAR"],data["MONTH"],data["DAY"])
     note = make_title(data,config_data) +"\n"+ make_summary(data,config_data)+ "\n" + make_details(data,config_data)
 
     if debug :
@@ -123,4 +124,4 @@ def construct_card(path,config_data,debug = False):
         print("\n¨¨¨¨¨¨¨¨¨")
         db.print_data(data)
         print("\n---------------------------------------------------------------------------------------------------\n")
-    return note
+    return note,date
