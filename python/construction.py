@@ -48,6 +48,10 @@ def isLogo(key,data,config_data):
         "MIDI" :(h_i>= int(config_data["H_MIDI"][0]) and h_i< int(config_data["H_APREM"][0])),
         "APREM" :(h_i>= int(config_data["H_APREM"][0]) and h_i< int(config_data["H_NUIT"][0]) and h_f < 24),
         "NUIT" : (h_i>= int(config_data["H_NUIT"][0]) or h_f>=24),
+        "RADIO":any(key in v_list for key in config_data["LRADIO"]),
+        "TD":any(key in v_list for key in config_data["LTD"]),
+        "FORM":any(key in v_list for key in config_data["LSPE"]),
+        "TR":any(key in v_list for key in config_data["LSPE"]),
         "1": any(key in v_list for key in config_data["L1"]),
         "9": any(key in v_list for key in config_data["L9"]),
         "12":any(key in v_list for key in config_data["L12"]),
@@ -56,6 +60,7 @@ def isLogo(key,data,config_data):
         "54":any(key in v_list for key in config_data["L54"]),
         "58":any(key in v_list for key in config_data["L58"]),
         "60":any(key in v_list for key in config_data["L60"]),
+
     }.get(key, False)
 
 def update_logo(logo,key,data,config_data):
@@ -67,7 +72,7 @@ def update_logo(logo,key,data,config_data):
 def make_logo(data,config_data):
     """ return a total logo for a specific note of a specific date"""
     logo = ""
-    keys_good_order = ["MOTO","BOR","PER","MATIN","MIDI","APREM","NUIT","1","9","12","17","42","54","58","60"]
+    keys_good_order = ["MOTO","BOR","PER","MATIN","MIDI","APREM","NUIT","1","9","12","17","42","54","58","60","FORM","TD"]
     for i in keys_good_order:
         logo = update_logo(i,logo,data,config_data)
     return logo

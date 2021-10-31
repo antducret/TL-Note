@@ -6,6 +6,7 @@
 
 - Construction
   - Détails
+  - meilleure gestion des conditions pour voiture... Moins de répétition dans le code.. Mais toujours des conditions claires
 
 - SIMPLENOTE
   - Note to dict() (content and key ???) --> delete / update

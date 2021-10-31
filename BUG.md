@@ -1,6 +1,6 @@
-List of bugs : " Card_date : BUG "
+List of bugs format = " Card_date : BUG "
 
-19-10-21 : TR car not recognized
+19-10-21 : TR car not recognized ("Service spécial")
 
 21-11-21 / 14-02-21  : TD car not recognized ?
 
