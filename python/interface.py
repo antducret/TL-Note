@@ -97,8 +97,10 @@ def open_main_window():
                 day1 = str(values["-HOLIDAYDAY1-"])[2:-2]
                 month1 = str(values["-HOLIDAYMONTH1-"])[2:-2]
                 year1 = str(values["-HOLIDAYYEAR1-"])[2:-2]
-                msn.add_holiday(int(day0),int(month0),int(year0),int(day1),int(month1),int(year1),config_data,id_SN)
-                window['-OUTPUT-'].update(" Vacances du "+day0+"/"+month0+"/"+year0+" au "+day1+"/"+month1+"/"+year1+" ajoutées")
+                if msn.add_holiday(int(day0),int(month0),int(year0),int(day1),int(month1),int(year1),config_data,id_SN):
+                    window['-OUTPUT-'].update(" Vacances du "+day0+"/"+month0+"/"+year0+" au "+day1+"/"+month1+"/"+year1+" ajoutées")
+                else:
+                    window['-OUTPUT-'].update(" Veuillez inscire les dates dans l'ordres chronologiques")
             else:
                 window['-OUTPUT-'].update("Vérifiez que tout les données ont étées saisies ( jour, mois, année) pour le début et la fin des vacances")
         elif event == "-SIMPLENOTE-":

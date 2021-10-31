@@ -3,6 +3,7 @@ import os
 import construction as cn
 import config as cf
 import extraction as ex
+import datetime as dt
 
 def add_break(d,m,y,type,config_data,id_SN):
     """ upload a note for breakday on simple note"""
@@ -11,9 +12,16 @@ def add_break(d,m,y,type,config_data,id_SN):
 
 def add_holiday(d0,m0,y0,d1,m1,y1,config_data,id_SN):
     """ upload a note for holiday on simple note"""
-    notes = cn.construct_holidays(d0,m0,y0,d1,m1,y1,config_data)
-    for note in notes :
-        if cf.UPLOAD : id_SN.add_note(note)
+    date0 = dt.datetime(y0,m0,d0)
+    date1 = dt.datetime(y1,m1,d1)
+    if date0 > date1:
+        return 0
+    else :
+        notes = cn.construct_holidays(d0,m0,y0,d1,m1,y1,config_data)
+        for note in notes :
+            if cf.UPLOAD : id_SN.add_note(note)
+        return 1
+
 
 def add_agentcard(folder,config_data,id_SN,DEBUG = False):
     """ upload a note for work days on simple note"""
