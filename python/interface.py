@@ -1,23 +1,18 @@
-import PySimpleGUI as sg
-import moresimplenote as msn
-import simplenote as sn
 import config as cf
+import datetime as dt
+import debug as db
+import moresimplenote as msn
+import PySimpleGUI as sg
+import simplenote as sn
 import subprocess
 import webbrowser
-import debug as db
+
 
 date_number = ["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]
 year_number = ["2021","2022","2023"]
 
-def open_main_window():
-    """ open the main window... """
-
-    id =  cf.get_id()
-    id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
-    config_data = cf.get_config()
-    tags = cf.get_tags()
-
-    sg.theme('Reddit')
+def get_layout():
+    """ layout of the main window """
     layout = [
             [
             sg.Text("")],
@@ -58,53 +53,56 @@ def open_main_window():
             [
             sg.T("")]
             ]
-    window = sg.Window('TL-Note', layout, size=(800,450),element_justification='l',auto_size_text=True,
-                       auto_size_buttons=True,resizable=True,grab_anywhere=False,border_depth=5,finalize=True)
-
-    while True:
-        event, values = window.read()
-        if event == sg.WIN_CLOSED:
-            break
-        elif event == "-SUBMITCARD-":
-            folder = str(values["-FOLDER-"])
-            msn.add_agentcard(folder,config_data,tags,id_SN,DEBUG=db.debug)
-            window['-OUTPUT-'].update(" Cartes agents ajoutées à partir du dossier : "+folder)
-        elif event == "-SUBMITBREAK-":
-            type_list = values["-BREAKTYPE-"]
-            day_list = values["-BREAKDAY-"]
-            month_list = values["-BREAKMONTH-"]
-            year_list = values["-BREAKYEAR-"]
-            if ([] not in [type_list,day_list,month_list,year_list]):
-                type = str(type_list)[2:-2]
-                day = str(day_list)[2:-2]
-                month = str(month_list)[2:-2]
-                year = str(year_list)[2:-2]
-                print(type,day,month,year)
-                msn.add_break(int(day),int(month),int(year),type,config_data,tags,id_SN)
-                window['-OUTPUT-'].update(" Congé " +type+" du "+day+"/"+month+"/"+year+" ajouté")
-            else:
-                window['-OUTPUT-'].update("Vérifiez que tout les données ont étées saisies (type, jour, mois, année)")
-        elif event == "-SUBMITHOLIDAY-":
-            day0 = values["-HOLIDAYDAY0-"]
-            month0 = values["-HOLIDAYMONTH0-"]
-            year0 = values["-HOLIDAYYEAR0-"]
-            day1 = values["-HOLIDAYDAY1-"]
-            month1 = values["-HOLIDAYMONTH1-"]
-            year1 = values["-HOLIDAYYEAR1-"]
-            if ([] not in [day0,day1,month0,month1,year0,year1] ):
-                day0 = str(values["-HOLIDAYDAY0-"])[2:-2]
-                month0 = str(values["-HOLIDAYMONTH0-"])[2:-2]
-                year0 = str(values["-HOLIDAYYEAR0-"])[2:-2]
-                day1 = str(values["-HOLIDAYDAY1-"])[2:-2]
-                month1 = str(values["-HOLIDAYMONTH1-"])[2:-2]
-                year1 = str(values["-HOLIDAYYEAR1-"])[2:-2]
-                if msn.add_holiday(int(day0),int(month0),int(year0),int(day1),int(month1),int(year1),config_data,tags,id_SN):
-                    window['-OUTPUT-'].update(" Vacances du "+day0+"/"+month0+"/"+year0+" au "+day1+"/"+month1+"/"+year1+" ajoutées")
-                else:
-                    window['-OUTPUT-'].update(" Veuillez inscire les dates dans l'ordres chronologiques")
-            else:
-                window['-OUTPUT-'].update("Vérifiez que tout les données ont étées saisies ( jour, mois, année) pour le début et la fin des vacances")
-        elif event == "-SIMPLENOTE-":
-            webbrowser.open('https://app.simplenote.com/', new = 2)
-        elif event == "-CONFIG-":
-                window['-OUTPUT-'].update("Cette fonctionnalité n'est pas encore implémentée")
+    return layout
+def get_window():
+    window = sg.Window('TL-Note', get_layout(), size=(800,450),element_justification='l',auto_size_text=True,
+    auto_size_buttons=True,resizable=True,grab_anywhere=False,border_depth=5,finalize=True)
+    sg.theme('Reddit')
+    return window
+def get_folder(values):
+    return str(values["-FOLDER-"])
+def get_break_string(values):
+    type = str(values["-BREAKTYPE-"])[2:-2]
+    day = str(values["-BREAKDAY-"])[2:-2]
+    month = str(values["-BREAKMONTH-"])[2:-2]
+    year = str(values["-BREAKYEAR-"])[2:-2]
+    return type,day,month,year
+def get_break_date(values):
+    t,d,m,y = get_break_string(values)
+    date = dt.datetime(int(y),int(m),int(d))
+    return date
+def get_break_validity(values):
+    type_list = values["-BREAKTYPE-"]
+    day_list = values["-BREAKDAY-"]
+    month_list = values["-BREAKMONTH-"]
+    year_list = values["-BREAKYEAR-"]
+    if ([] in [type_list,day_list,month_list,year_list]):
+        return "VOID"
+    if int.get_break_date()<dt.today():
+        return "PAST"
+    else: return 1
+def get_holiday_string(values):
+    d0 = str(values["-HOLIDAYDAY0-"])[2:-2]
+    m0 = str(values["-HOLIDAYMONTH0-"])[2:-2]
+    y0 = str(values["-HOLIDAYYEAR0-"])[2:-2]
+    d1 = str(values["-HOLIDAYDAY1-"])[2:-2]
+    m1 = str(values["-HOLIDAYMONTH1-"])[2:-2]
+    y1 = str(values["-HOLIDAYYEAR1-"])[2:-2]
+    return d0,m0,y0,d1,m1,y1
+def get_holiday_dates(values):
+    d0,m0,y0,d1,m1,y1 = get_holiday_string(values)
+    date0 = dt.datetime(int(y0),int(m0),int(d0))
+    date1 = dt.datetime(int(y1),int(m1),int(d1))
+    return date0,date1
+def get_holiday_validity(values):
+    d0 = values["-HOLIDAYDAY0-"]
+    m0 = values["-HOLIDAYMONTH0-"]
+    y0 = values["-HOLIDAYYEAR0-"]
+    d1 = values["-HOLIDAYDAY1-"]
+    m1 = values["-HOLIDAYMONTH1-"]
+    y1 = values["-HOLIDAYYEAR1-"]
+    if ([] in [d0,m0,y0,d1,m1,y1]): return "VOID"
+    date0,date1 = get_holiday_dates(values)
+    if date0<dt.today() or date1<dt.today(): return "PAST"
+    if date0>date1: return "REVERSE"
+    else: return 1
