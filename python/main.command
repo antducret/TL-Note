@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 
 # IMPORT
-import interface as int
 import config as cf
+import interface as int
+import moresimplenote as msn
+import PySimpleGUI as sg
+import simplenote as sn
+import webbrowser as web
+
 
 # MAIN
 
@@ -14,8 +19,12 @@ tags = cf.get_tags()
 id = cf.get_id()
 id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
 
+#   Delete old notes
+msn.outdate(id_SN)
+
 #   Interface
-    window = int.get_window()
+sg.theme('Reddit')
+window = int.get_window()
 while True:
     event, values = window.read()
     if event == sg.WIN_CLOSED:
@@ -31,7 +40,7 @@ while True:
             window['-OUTPUT-'].update("Veuillez entrer une date future")
         else :
             type,day,month,year = int.get_break_string(values)
-            date = int.get_break_date()
+            date = int.get_break_date(values)
             msn.add_break(date,type,config,tags,id_SN)
             window['-OUTPUT-'].update(" Congé " +type+" du "+day+"/"+month+"/"+year+" ajouté")
     elif event == "-SUBMITHOLIDAY-":
@@ -47,6 +56,6 @@ while True:
             d0,m0,y0,d1,m1,y1 = int.get_holiday_string(values)
             window['-OUTPUT-'].update(" Vacances du "+d0+"/"+m0+"/"+y0+" au "+d1+"/"+m1+"/"+y1+" ajoutées")
     elif event == "-SIMPLENOTE-":
-        webbrowser.open('https://app.simplenote.com/', new = 2)
+        web.open('https://app.simplenote.com/', new = 2)
     elif event == "-CONFIG-":
         window['-OUTPUT-'].update("Cette fonctionnalité n'est pas encore implémentée")

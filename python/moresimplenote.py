@@ -2,46 +2,50 @@ import simplenote as sn
 import os
 import construction as cn
 import config as cf
+import debug as db
 import extraction as ex
 import datetime as dt
 
-def add_break(d,m,y,type,config_data,tags,id_SN):
+def add_break(date,type,config,tags,id_SN):
     """ upload a note for breakday on simple note"""
-    note = cn.construct_break(d,m,y,type,config_data)
-    date = dt.datetime(y,m,d)
+    note = cn.construct_break(date,type,config)
     upload_note(note,date,tags,id_SN)
 
-def add_holiday(d0,m0,y0,d1,m1,y1,config_data,tags,id_SN):
+def add_holiday(date0,date1,config_data,tags,id_SN):
     """ upload a note for holiday on simple note"""
-    date0 = dt.datetime(y0,m0,d0)
-    date1 = dt.datetime(y1,m1,d1)
-    if date0 > date1:
-        return 0
-    else :
-        numdays = (date1-date0).days
-        dates = [date0 + datetime.timedelta(days=x) for x in range(numdays)]
-        notes = cn.construct_holidays(d0,m0,y0,d1,m1,y1,config_data)
-        for i in range(len(notes)) :
-            upload_note(notes[i],dates[i],tags,id_SN)
-        return 1
+    numdays = (date1-date0).days
+    dates = [date0 + dt.timedelta(days=x) for x in range(numdays)]
+    notes = cn.construct_holidays(date0,date1,config_data)
+    for i in range(numdays) :
+        upload_note(notes[i],dates[i],tags,id_SN)
 
 def add_agentcard(folder,config_data,tags,id_SN,DEBUG = False):
     """ upload a note for work days on simple note"""
     pathfiles = sorted([f for f in os.listdir(folder) if f.endswith('.pdf')])
     for path in pathfiles :
-        note,date = cn.construct_card(folder+path,config_data,debug = DEBUG )
-        upload_note(note,date,tags,id_SN)
+        note = cn.construct_card(folder+path,config_data,debug = DEBUG)
+        if note != "PAST": upload_note(note,date,tags,id_SN)
 
 def upload_note(note,date,tags,id_SN):
+    dict_note = dict()
+    dict_note["key"] = date.strftime("%d_%m_%Y")
+    dict_note["content"] = note
+    dict_note["tags"] = ["TEST"] #TODO : Change to "tags" when ready to upload real data
+    db.print_data(dict_note)
     if cf.UPLOAD :
-        dict_note = dict()
-        dict_note["key"] = str(date)
-        dict_note["content"] = note
-        dict_note["tags"] = tags
         id_SN.update_note(dict_note)
-    else :
-        pass
 
-def outdate():
+def outdate(id_SN):
     """ WIP:  delete all outdated notes """
-    pass
+    #outdated_keys = [(dt.date.today() - dt.timedelta(days=x)).strftime("%d_%m_%Y") for x in range(1,731)]
+    all_notes = id_SN.get_note_list(data = False)[0]
+    for note in all_notes:
+        if "_" in note["key"]:
+            date_note = dt.datetime.strptime(note["key"],"%d_%m_%Y")
+            if  date_note < dt.datetime.today() :
+                id_SN.delete_note(note["key"])
+            elif date_note.year == dt.datetime.today().year :
+                dict_note = id_SN.get_note(note["key"])
+                if dict_note["content"][0] != "-":
+                    dict_note["content"] = "-"+dict_note["content"]
+                    id_SN.update_note(dict_note)

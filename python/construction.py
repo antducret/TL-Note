@@ -3,32 +3,25 @@ import config as cf
 import debug as db
 import datetime as dt
 
-def construct_break(d,m,y,t,config_data):
+def construct_break(date,t,config_data):
     """ return a string named note formated for break day"""
-    l = ext.weekday(d,m,y)
-    d = cf.int2digit(d)
-    m = cf.int2digit(m)
-    y = str(y)
-    t = str(t)
+    l = ext.weekday(date)
+    d = cf.int2digit(date.day)
+    m = cf.int2digit(date.month)
     logo = cf.get_logo("CONGE",config_data)
     return "{}-{} {} {} \n\n {}".format(d,m,l,logo,t)
 
 def construct_holiday(date,config_data):
     """ return a string named note formated for holiday day"""
-    d = date.day
-    m = date.month
-    y = date.year
-    d_s = cf.int2digit(d)
-    m_s = cf.int2digit(m)
-    l = ext.weekday(d,m,y)
+    d = cf.int2digit(date.day)
+    m = cf.int2digit(date.month)
+    l = ext.weekday(date)
     logo = cf.get_logo("VACANCE",config_data)
-    return "{}-{} {} {}️".format(d_s,m_s,l,logo)
+    return "{}-{} {} {}️".format(d,m,l,logo)
 
-def construct_holidays(d0,m0,y0,d1,m1,y1,config_data):
+def construct_holidays(date0,date1,config_data):
     """ return a list of notes formated for holiday days"""
     notes = []
-    date0 = dt.datetime(y0,m0,d0)
-    date1 = dt.datetime(y1,m1,d1)
     date = date0
     while (date != (date1 + dt.timedelta(days=1))):
         notes.append(construct_holiday(date,config_data))
@@ -116,12 +109,14 @@ def construct_card(path,config_data,debug = False):
     """ return a note (string) from pdf file to upload on simplenote """
     data = ext.extract_data(path)
     date = dt.datetime(data["YEAR"],data["MONTH"],data["DAY"])
-    note = make_title(data,config_data) +"\n"+ make_summary(data,config_data)+ "\n" + make_details(data,config_data)
-
-    if debug :
-        print("¨¨¨¨¨¨¨¨¨\n")
-        print(note)
-        print("\n¨¨¨¨¨¨¨¨¨")
-        db.print_data(data)
-        print("\n---------------------------------------------------------------------------------------------------\n")
-    return note,date
+    if date < dt.datetime.today()-dt.timedelta(days=1):
+        return "PAST"
+    else :
+        note = make_title(data,config_data) +"\n"+ make_summary(data,config_data)+ "\n" + make_details(data,config_data)
+        if debug :
+            print("¨¨¨¨¨¨¨¨¨\n")
+            print(note)
+            print("\n¨¨¨¨¨¨¨¨¨")
+            db.print_data(data)
+            print("\n---------------------------------------------------------------------------------------------------\n")
+        return note
