@@ -12,7 +12,11 @@
   - Suppression note échue
   - Gestion des changement d'année dans le listing
   - Mise à jour d'une note
+<<<<<<< HEAD
   - TAGS for each note
+=======
+  - TAGS : ducretjcl@gmail.com,gajducret@gmail.com,jclducret@gmail.com,vietti.violi@gmail.com,citaro414@gmail.com
+>>>>>>> e6050f9be6ef11183a2f8107fccb368d7bdb845c
 
 
 - controler input
