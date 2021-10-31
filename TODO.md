@@ -6,13 +6,13 @@
 
 - Construction
   - Détails
-  - meilleure gestion des conditions pour voiture... Moins de répétition dans le code.. Mais toujours des conditions claires
 
 - SIMPLENOTE
   - Note to dict() (content and key ???) --> delete / update
   - Suppression note échue
   - Gestion des changement d'année dans le listing
   - Mise à jour d'une note
+  - TAGS for each note
 
 
 - controler input

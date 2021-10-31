@@ -45,6 +45,7 @@ A décider avec client...
     - horaires détaillés
 
 ### B.5. Publication de la note
+- more information on SIMPLENOTE : https://kendersec.github.io/SimpleNote/SimpleNote-API-v2.1.3.pdf
 
 - Remplacement des notes de même date ?
 
