@@ -109,7 +109,7 @@ def construct_card(path,config_data):
     data = ext.extract_data(path)
     date = dt.datetime(data["YEAR"],data["MONTH"],data["DAY"])
     if date < dt.datetime.today()-dt.timedelta(days=1):
-        return "PAST"
+        return "PAST",date
     else :
         note = make_title(data,config_data) +"\n"+ make_summary(data,config_data)+ "\n" + make_details(data,config_data)
-        return note
+        return note,date

@@ -30,7 +30,7 @@ while True:
     if event == sg.WIN_CLOSED:
         break
     elif event == "-SUBMITCARD-":
-        folder = int.get_folder()
+        folder = int.get_folder(values)
         msn.add_agentcard(folder,config,tags,id_SN)
         window['-OUTPUT-'].update(" Cartes agents ajoutées à partir du dossier : "+folder)
     elif event == "-SUBMITBREAK-":

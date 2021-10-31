@@ -23,7 +23,7 @@ def extract_data(path):
     data["DAY"] =  int(date_tab[0])
     data["MONTH"] = int(date_tab[1])
     data["YEAR"] = int(date_tab[2])
-    data["WEEKDAY"] = weekday(data["DAY"],data["MONTH"],data["YEAR"])
+    data["WEEKDAY"] = weekday(dt.datetime(data["YEAR"],data["MONTH"],data["DAY"]))
 
     # General info
     data["AGENT"] = re.search('\(\d{4}\)', txt)[0][1:-1]

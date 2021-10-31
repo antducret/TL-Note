@@ -23,7 +23,7 @@ def add_agentcard(folder,config_data,tags,id_SN):
     """ upload a note for work days on simple note"""
     pathfiles = sorted([f for f in os.listdir(folder) if f.endswith('.pdf')])
     for path in pathfiles :
-        note = cn.construct_card(folder+path,config_data)
+        note,date = cn.construct_card(folder+"/"+path,config_data)
         if note != "PAST": upload_note(note,date,tags,id_SN)
 
 def upload_note(note,date,tags,id_SN):
@@ -52,3 +52,4 @@ def outdate(id_SN):
                 if dict_note["content"][0] != "-":
                     dict_note["content"] = "-"+dict_note["content"]
                     id_SN.update_note(dict_note)
+    print("Notes mises à jours")
