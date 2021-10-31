@@ -3,9 +3,8 @@ import datetime as dt
 import debug as db
 import re
 
-def weekday(d,m,y):
+def weekday(date):
     """ return the first french letter for each weekday """
-    date = dt.datetime(int(y),int(m),int(d))
     letters = ["L","M","W","J","V","S","D"]
     return letters[date.weekday()]
 

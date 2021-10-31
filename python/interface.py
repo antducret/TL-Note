@@ -5,7 +5,7 @@ import moresimplenote as msn
 import PySimpleGUI as sg
 import simplenote as sn
 import subprocess
-import webbrowser
+
 
 
 date_number = ["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]
@@ -57,7 +57,6 @@ def get_layout():
 def get_window():
     window = sg.Window('TL-Note', get_layout(), size=(800,450),element_justification='l',auto_size_text=True,
     auto_size_buttons=True,resizable=True,grab_anywhere=False,border_depth=5,finalize=True)
-    sg.theme('Reddit')
     return window
 def get_folder(values):
     return str(values["-FOLDER-"])
@@ -78,7 +77,7 @@ def get_break_validity(values):
     year_list = values["-BREAKYEAR-"]
     if ([] in [type_list,day_list,month_list,year_list]):
         return "VOID"
-    if int.get_break_date()<dt.today():
+    if get_break_date(values) <dt.datetime.today()-dt.timedelta(days=1):
         return "PAST"
     else: return 1
 def get_holiday_string(values):
@@ -103,6 +102,7 @@ def get_holiday_validity(values):
     y1 = values["-HOLIDAYYEAR1-"]
     if ([] in [d0,m0,y0,d1,m1,y1]): return "VOID"
     date0,date1 = get_holiday_dates(values)
-    if date0<dt.today() or date1<dt.today(): return "PAST"
+    today_date = dt.datetime.today()-dt.timedelta(days=1)
+    if date0<today_date or date1<today_date: return "PAST"
     if date0>date1: return "REVERSE"
     else: return 1

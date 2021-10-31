@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import config as cf
+import datetime as dt
 import debug as db
 import extraction as ext
 import moresimplenote as msn
@@ -26,8 +27,8 @@ if 0:
     msn.add_agentcard("./pers/INPUT/",config_data,id_SN,DEBUG = db.debug)
 
 # upload note
-if 0:
+if 1:
     id =  cf.get_id()
     id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
-    msn.upload_note("_NOTE_", "_DATE_", id_SN)
-    print(id_SN.get_note("_DATE_"))
+    date = dt.datetime(2010,1,1)
+    msn.upload_note("_NOTE_",date,"", id_SN)
