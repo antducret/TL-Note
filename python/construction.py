@@ -31,7 +31,7 @@ def isLogo(key,data,config_data):
     """ return a boolean to know if a specific logo must be added based on data of a day"""
     h_i = int(data["H_I"][0][:2])
     h_f = int(data["H_F"][-1][:2])
-    v_list = [key[:2] for key in data["CAR"] if key[:2].isdigit()]
+    v_list = [(key[:2] if key[:2].isdigit() else key) for key in data["CAR"] ]
     return {
         "MOTO": (data["L_I"][0] == data["L_F"][-1] and data["L_I"][0] not in config_data["DEPOTS"]),
         "BOR" : (data["L_F"][-1] in config_data["DEPOTS_BOR"]),

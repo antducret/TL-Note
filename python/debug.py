@@ -1,6 +1,6 @@
 from warnings import warn as warnings
 
-debug = 1 # Define if debug mode is on/off
+DEBUG = 1 # Define if debug mode is on/off
 
 def print_data(data):
     """ print a dictionary called data  in a specific format """
