@@ -29,10 +29,7 @@ def add_agentcard(folder,config_data,tags,id_SN,DEBUG = False):
 def upload_note(note,date,tags,id_SN):
     dict_note = dict()
     dict_note["key"] = date.strftime("%d_%m_%Y")
-<<<<<<< HEAD
     if date.year == dt.datetime.today().year and note[0]!="-" : note = "-"+note
-=======
->>>>>>> f82bd2ee5c9640a23ab0333e35297e6a06ca2387
     dict_note["content"] = note
     dict_note["tags"] = ["TEST"] #TODO : Change to "tags" when ready to upload real data
     db.print_data(dict_note)
@@ -41,10 +38,6 @@ def upload_note(note,date,tags,id_SN):
 
 def outdate(id_SN):
     """ WIP:  delete all outdated notes """
-<<<<<<< HEAD
-=======
-    #outdated_keys = [(dt.date.today() - dt.timedelta(days=x)).strftime("%d_%m_%Y") for x in range(1,731)]
->>>>>>> f82bd2ee5c9640a23ab0333e35297e6a06ca2387
     all_notes = id_SN.get_note_list(data = False)[0]
     for note in all_notes:
         if "_" in note["key"]:
