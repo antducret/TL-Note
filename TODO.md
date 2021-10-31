@@ -1,6 +1,4 @@
 # ESSENTIAL :
-- Constante :
-  - Optimisation utilisation des constantes ID,ID_SN,CONFIG,TAGS
 
 - Extraction
   - DEBUG : Extraction pour certaines mise en forme spéciale -->  (other(pdf2text) or exhaustif extraction)

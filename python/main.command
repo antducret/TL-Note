@@ -31,7 +31,7 @@ while True:
         break
     elif event == "-SUBMITCARD-":
         folder = int.get_folder()
-        msn.add_agentcard(folder,config,tags,id_SN,DEBUG=db.debug)
+        msn.add_agentcard(folder,config,tags,id_SN)
         window['-OUTPUT-'].update(" Cartes agents ajoutées à partir du dossier : "+folder)
     elif event == "-SUBMITBREAK-":
         if int.get_break_validity(values) == "VOID":

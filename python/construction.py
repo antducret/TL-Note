@@ -1,6 +1,5 @@
 import extraction as ext
 import config as cf
-import debug as db
 import datetime as dt
 
 def construct_break(date,t,config_data):
@@ -105,7 +104,7 @@ def make_details(data,config_data):
     """ WIP : return a string of the detailed information of a specific date"""
     return "_DETAILS_"
 
-def construct_card(path,config_data,debug = False):
+def construct_card(path,config_data):
     """ return a note (string) from pdf file to upload on simplenote """
     data = ext.extract_data(path)
     date = dt.datetime(data["YEAR"],data["MONTH"],data["DAY"])
@@ -113,10 +112,4 @@ def construct_card(path,config_data,debug = False):
         return "PAST"
     else :
         note = make_title(data,config_data) +"\n"+ make_summary(data,config_data)+ "\n" + make_details(data,config_data)
-        if debug :
-            print("¨¨¨¨¨¨¨¨¨\n")
-            print(note)
-            print("\n¨¨¨¨¨¨¨¨¨")
-            db.print_data(data)
-            print("\n---------------------------------------------------------------------------------------------------\n")
         return note

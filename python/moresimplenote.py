@@ -1,8 +1,8 @@
 import simplenote as sn
 import os
+import debug as db
 import construction as cn
 import config as cf
-import debug as db
 import extraction as ex
 import datetime as dt
 
@@ -19,11 +19,11 @@ def add_holiday(date0,date1,config_data,tags,id_SN):
     for i in range(numdays) :
         upload_note(notes[i],dates[i],tags,id_SN)
 
-def add_agentcard(folder,config_data,tags,id_SN,DEBUG = False):
+def add_agentcard(folder,config_data,tags,id_SN):
     """ upload a note for work days on simple note"""
     pathfiles = sorted([f for f in os.listdir(folder) if f.endswith('.pdf')])
     for path in pathfiles :
-        note = cn.construct_card(folder+path,config_data,debug = DEBUG)
+        note = cn.construct_card(folder+path,config_data)
         if note != "PAST": upload_note(note,date,tags,id_SN)
 
 def upload_note(note,date,tags,id_SN):
@@ -32,7 +32,10 @@ def upload_note(note,date,tags,id_SN):
     if date.year == dt.datetime.today().year and note[0]!="-" : note = "-"+note
     dict_note["content"] = note
     dict_note["tags"] = ["TEST"] #TODO : Change to "tags" when ready to upload real data
-    db.print_data(dict_note)
+    if db.DEBUG :
+        print("\n----------------------------\n")
+        db.print_data(dict_note)
+        print("\n----------------------------\n")
     if cf.UPLOAD :
         id_SN.update_note(dict_note)
 

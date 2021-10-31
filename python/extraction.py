@@ -1,6 +1,5 @@
 import textract as tx
 import datetime as dt
-import debug as db
 import re
 
 def weekday(date):

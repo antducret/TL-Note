@@ -1,6 +1,5 @@
 import config as cf
 import datetime as dt
-import debug as db
 import moresimplenote as msn
 import PySimpleGUI as sg
 import simplenote as sn
