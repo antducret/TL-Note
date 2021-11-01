@@ -37,9 +37,9 @@ def extract_data(path):
     # --- SPECIFIC DATA -----
 
     # Voiture
-    CAR_tmp = re.search('Voiture\s+((\d+ +\- +\d+\s+)|Radio\s+|Form\s+|TD\s+)+', txt)
+    CAR_tmp = re.search('Voiture\s+((\d+ +\- +\d+\s+)|Radio\s+|Form\s+|TD\s+)+\s+Prise', txt)
     CAR_tmp = CAR_tmp[0][9:].split("\n") if CAR_tmp != None else ["00000"]
-    data["CAR"] = [x.strip() for x in CAR_tmp if x]
+    data["CAR"] = [x.strip() for x in CAR_tmp if x][:-1]
 
     # Prise début
     P_I_tmp = re.search('Prise\s+début\s+(\d{1,2}:\d{1,2}\n)+\s', txt)
