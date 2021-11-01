@@ -9,7 +9,7 @@ import os
 
 
 # control a particular pdf file
-if 0:
+if 1:
     id =  cf.get_id()
     id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
     config = cf.get_config()
@@ -20,7 +20,7 @@ if 0:
     db.print_data(ext.extract_data(path))
 
 # add folder of cards
-if 1:
+if 0:
     id =  cf.get_id()
     id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
     config = cf.get_config()
