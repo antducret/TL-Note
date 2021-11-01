@@ -9,18 +9,19 @@ import simplenote as sn
 
 # control a particular pdf file
 if 0:
-    m = 11
-    d = 11
-    path = "./pers/INPUT/{}-{}.pdf".format(m,d)
-    print(ext.pdf2text(path))
-    db.print_data(ext.extract_data(path))
+    id =  cf.get_id()
+    id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
+    config = cf.get_config()
+    path = "./pers/INPUTbug/"
+    msn.add_agentcard(path,config,["TEST"],id_SN)
 
 # add folder of cards
 if 1:
     id =  cf.get_id()
     id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
-    config_data = cf.get_config()
-    msn.add_agentcard("./pers/INPUT/",config_data,["TEST"],id_SN)
+    config = cf.get_config()
+    msn.add_agentcard("./pers/INPUT/",config,["TEST"],id_SN)
+
 
 # upload note
 if 0:

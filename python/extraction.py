@@ -1,4 +1,5 @@
 import textract as tx
+import debug as db
 import datetime as dt
 import re
 
@@ -15,6 +16,7 @@ def pdf2text(path):
 def extract_data(path):
     """ extract all data from a pdf returning a dictionary """
     txt = pdf2text(path)
+    #print("\n\n-----TXT-----\n"+txt+"\n")
     data = dict()
 
     # Date information
@@ -37,7 +39,7 @@ def extract_data(path):
     # Voiture
     CAR_tmp = re.search('Voiture\s+((\d+ +\- +\d+\s+)|Radio\s+|Form\s+|TD\s+)+', txt)
     CAR_tmp = CAR_tmp[0][9:].split("\n") if CAR_tmp != None else ["00000"]
-    data["CAR"] = [x for x in CAR_tmp if x]
+    data["CAR"] = [x.strip() for x in CAR_tmp if x]
 
     # Prise début
     P_I_tmp = re.search('Prise\s+début\s+(\d{1,2}:\d{1,2}\n)+\s', txt)
@@ -88,4 +90,7 @@ def extract_data(path):
     data["TAB"] = [x for x in txt.split("\n")[:50] if x not in [""," ","\n","\n "]]
     data["SOURCE"] = re.search('\d{2}/\d{2}/\d{4} \d{2}:\d{2}', [x for x in txt.split("\n") if "HASTUS" in x][0])[0]
 
+    #print("\n-----DATA-----\n")
+    #db.print_data(data)
+    #print("\n")
     return data

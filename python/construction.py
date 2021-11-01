@@ -1,84 +1,85 @@
 import extraction as ext
 import config as cf
 import datetime as dt
+import re
 
-def construct_break(date,t,config_data):
+def construct_break(date,t,config):
     """ return a string named note formated for break day"""
     l = ext.weekday(date)
     d = cf.int2digit(date.day)
     m = cf.int2digit(date.month)
-    logo = cf.get_logo("CONGE",config_data)
+    logo = cf.get_logo("CONGE",config)
     return "{}-{} {} {} \n\n {}".format(d,m,l,logo,t)
 
-def construct_holiday(date,config_data):
+def construct_holiday(date,config):
     """ return a string named note formated for holiday day"""
     d = cf.int2digit(date.day)
     m = cf.int2digit(date.month)
     l = ext.weekday(date)
-    logo = cf.get_logo("VACANCE",config_data)
+    logo = cf.get_logo("VACANCE",config)
     return "{}-{} {} {}️".format(d,m,l,logo)
 
-def construct_holidays(date0,date1,config_data):
+def construct_holidays(date0,date1,config):
     """ return a list of notes formated for holiday days"""
     notes = []
     date = date0
     while (date != (date1 + dt.timedelta(days=1))):
-        notes.append(construct_holiday(date,config_data))
+        notes.append(construct_holiday(date,config))
         date += dt.timedelta(days=1)
     return notes
 
-def isLogo(key,data,config_data):
+def isLogo(key,data,config):
     """ return a boolean to know if a specific logo must be added based on data of a day"""
     h_i = int(data["H_I"][0][:2])
     h_f = int(data["H_F"][-1][:2])
-    v_list = [(key[:2] if key[:2].isdigit() else key) for key in data["CAR"] ]
+    v_list = [(re.search('\d{1,2}', key)[0] if key[0].isdigit() else key) for key in data["CAR"]]
     return {
-        "MOTO": (data["L_I"][0] == data["L_F"][-1] and data["L_I"][0] not in config_data["DEPOTS"]),
-        "BOR" : (data["L_F"][-1] in config_data["DEPOTS_BOR"]),
-        "PER" : (data["L_F"][-1] in config_data["DEPOTS_PER"]),
-        "MATIN" :(h_i>= int(config_data["H_MATIN"][0]) and h_i< int(config_data["H_MIDI"][0])),
-        "MIDI" :(h_i>= int(config_data["H_MIDI"][0]) and h_i< int(config_data["H_APREM"][0])),
-        "APREM" :(h_i>= int(config_data["H_APREM"][0]) and h_i< int(config_data["H_NUIT"][0]) and h_f < 24),
-        "NUIT" : (h_i>= int(config_data["H_NUIT"][0]) or h_f>=24),
-        "RADIO":any(key in v_list for key in config_data["LRADIO"]),
-        "TD":any(key in v_list for key in config_data["LTD"]),
-        "FORM":any(key in v_list for key in config_data["LSPE"]),
-        "TR":any(key in v_list for key in config_data["LSPE"]),
-        "1": any(key in v_list for key in config_data["L1"]),
-        "9": any(key in v_list for key in config_data["L9"]),
-        "12":any(key in v_list for key in config_data["L12"]),
-        "17":any(key in v_list for key in config_data["L17"]),
-        "42":any(key in v_list for key in config_data["L42"]),
-        "54":any(key in v_list for key in config_data["L54"]),
-        "58":any(key in v_list for key in config_data["L58"]),
-        "60":any(key in v_list for key in config_data["L60"]),
+        "MOTO": (data["L_I"][0] == data["L_F"][-1] and data["L_I"][0] not in config["DEPOTS"]),
+        "BOR" : (data["L_F"][-1] in config["DEPOTS_BOR"]),
+        "PER" : (data["L_F"][-1] in config["DEPOTS_PER"]),
+        "MATIN" :(h_i>= int(config["H_MATIN"][0]) and h_i< int(config["H_MIDI"][0])),
+        "MIDI" :(h_i>= int(config["H_MIDI"][0]) and h_i< int(config["H_APREM"][0])),
+        "APREM" :(h_i>= int(config["H_APREM"][0]) and h_i< int(config["H_NUIT"][0]) and h_f < 24),
+        "NUIT" : (h_i>= int(config["H_NUIT"][0]) or h_f>=24),
+        "RADIO":any(key in v_list for key in config["LRADIO"]),
+        "TD":any(key in v_list for key in config["LTD"]),
+        "SPE":any(key in v_list for key in config["LSPE"]),
+        "1": any(key in v_list for key in config["L1"]),
+        "9": any(key in v_list for key in config["L9"]),
+        "12":any(key in v_list for key in config["L12"]),
+        "17":any(key in v_list for key in config["L17"]),
+        "42":any(key in v_list for key in config["L42"]),
+        "50":any(key in v_list for key in config["L50"]),
+        "54":any(key in v_list for key in config["L54"]),
+        "58":any(key in v_list for key in config["L58"]),
+        "60":any(key in v_list for key in config["L60"]),
 
     }.get(key, False)
 
-def update_logo(logo,key,data,config_data):
+def update_logo(logo,key,data,config):
     """ return a total logo with addition of specific logo if specific condition is ok """
-    if isLogo(key,data,config_data):
-        logo += cf.get_logo(key,config_data)
+    if isLogo(key,data,config):
+        logo += cf.get_logo(key,config)
     return logo
 
-def make_logo(data,config_data):
+def make_logo(data,config):
     """ return a total logo for a specific note of a specific date"""
     logo = ""
-    keys_good_order = ["MOTO","BOR","PER","MATIN","MIDI","APREM","NUIT","1","9","12","17","42","54","58","60","FORM","TD"]
-    for i in keys_good_order:
-        logo = update_logo(i,logo,data,config_data)
+    keys_good_order = ["MOTO","BOR","PER","MATIN","MIDI","APREM","NUIT","1","9","12","17","42","50","54","58","60","RADIO","SPE","TD"]
+    for key in keys_good_order:
+        logo = update_logo(logo,key,data,config)
     return logo
 
-def make_title(data,config_data):
+def make_title(data,config):
     """ return a note title with this format : MM-DD WEEKDAY_LETTER LOGO START_HOUR START_PLACE    """
     month = cf.int2digit(data["MONTH"])
     day = cf.int2digit(data["DAY"])
     M_D = month+"-"+day
-    logo = make_logo(data, config_data)
+    logo = make_logo(data, config)
     title = "{} {} {} {} {}\n".format(M_D,data["WEEKDAY"],logo,data["H_I"][0],data["L_I"][0])
     return title
 
-def make_summary(data,config_data):
+def make_summary(data,config):
     """ return a summary of the day with this format :
     -----
         TURN DD/MM/YYYY
@@ -91,7 +92,7 @@ def make_summary(data,config_data):
 
     day = cf.int2digit(data["DAY"])
     month = cf.int2digit(data["MONTH"])
-    summary = "{TURN} {DAY}/{MONTH}/{YEAR}\n\n".format(**data)
+    summary = "{} {}/{}/{}\n\n".format(data["TURN"],day,month,data["YEAR"])
 
     if all((section != None and len(section)==len(data["CAR"]))  for section in [data["CAR"],data["P_I"],data["L_I"],data["H_I"],data["H_F"],data["L_F"],data["P_F"]]):
         for i in range(len(data["CAR"])):
@@ -100,16 +101,16 @@ def make_summary(data,config_data):
 
     return summary
 
-def make_details(data,config_data):
+def make_details(data,config):
     """ WIP : return a string of the detailed information of a specific date"""
     return "_DETAILS_"
 
-def construct_card(path,config_data):
+def construct_card(path,config):
     """ return a note (string) from pdf file to upload on simplenote """
     data = ext.extract_data(path)
     date = dt.datetime(data["YEAR"],data["MONTH"],data["DAY"])
     if date < dt.datetime.today()-dt.timedelta(days=1):
         return "PAST",date
     else :
-        note = make_title(data,config_data) +"\n"+ make_summary(data,config_data)+ "\n" + make_details(data,config_data)
+        note = make_title(data,config) +"\n"+ make_summary(data,config)+ "\n" + make_details(data,config)
         return note,date

@@ -7,23 +7,23 @@ import extraction as ex
 import datetime as dt
 
 def add_break(date,type,config,tags,id_SN):
-    """ upload a note for breakday on simple note"""
+    """ call upload for a note for breakday on simple note"""
     note = cn.construct_break(date,type,config)
     upload_note(note,date,tags,id_SN)
 
-def add_holiday(date0,date1,config_data,tags,id_SN):
-    """ upload a note for holiday on simple note"""
+def add_holiday(date0,date1,config,tags,id_SN):
+    """ call upload for a note for holiday on simple note"""
     numdays = (date1-date0).days
     dates = [date0 + dt.timedelta(days=x) for x in range(numdays)]
-    notes = cn.construct_holidays(date0,date1,config_data)
+    notes = cn.construct_holidays(date0,date1,config)
     for i in range(numdays) :
         upload_note(notes[i],dates[i],tags,id_SN)
 
-def add_agentcard(folder,config_data,tags,id_SN):
-    """ upload a note for work days on simple note"""
+def add_agentcard(folder,config,tags,id_SN):
+    """ call upload for a note for work days on simple note"""
     pathfiles = sorted([f for f in os.listdir(folder) if f.endswith('.pdf')])
     for path in pathfiles :
-        note,date = cn.construct_card(folder+"/"+path,config_data)
+        note,date = cn.construct_card(folder+"/"+path,config)
         if note != "PAST": upload_note(note,date,tags,id_SN)
 
 def upload_note(note,date,tags,id_SN):

@@ -8,11 +8,11 @@ TAGS_FILE = "./pers/tags.csv"
 
 def get_config():
     """ return a dictionary containing all the data in config.csv """
-    config_data = dict()
+    config = dict()
     with open(CONFIG_FILE,'r') as data:
        for line in csv.reader(data,delimiter = ";"):
-           config_data[line[0]]  = [x for x in line[1].split(',')]
-    return config_data
+           config[line[0]]  = [x for x in line[1].split(',')]
+    return config
 
 def print_cf():
     """ print all the data contained in config.csv """
@@ -36,9 +36,10 @@ def get_tags():
             tags.append(line)
     return tags
 
-def get_logo(key,config_data):
-    """ return the string "emoji" corresponding to the CLDR code at config_data[key]  """
-    return emoji.emojize(config_data[key][0])
+def get_logo(key,config):
+    """ return the string "emoji" corresponding to the CLDR code at config[key]  """
+    logo = emoji.emojize(config[key][0])
+    return logo
 
 def int2digit(int):
     """ return a double digit string of an int """
