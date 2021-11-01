@@ -85,9 +85,13 @@ def extract_data(path):
     data["P_F"] = [x for x in P_F_tmp if x]
 
     # Further details to determine
+    data["DOTLINE"] = [line for line in txt.split("\n") if "....." in line]
+    data["KEYWORD"] = [line for line in txt.split("\n") if ("Coupure" in line or "Interruption" in line)]
+    data["DOUBLE_HOUR"] = [line for line in txt.split("\n") if re.match("[0-9][0-9]:[0-9][0-9] [0-9][0-9]:[0-9][0-9]\s*", line)]
+
 
     # Used for DEBUG
-    data["TAB"] = [x for x in txt.split("\n")[:50] if x not in [""," ","\n","\n "]]
+    data["TAB"] = [x for x in txt.split("\n") if x not in [""," ","\n","\n "]]
     data["SOURCE"] = re.search('\d{2}/\d{2}/\d{4} \d{2}:\d{2}', [x for x in txt.split("\n") if "HASTUS" in x][0])[0]
 
     #print("\n-----DATA-----\n")

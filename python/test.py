@@ -13,11 +13,8 @@ if 1:
     id =  cf.get_id()
     id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
     config = cf.get_config()
-    folder = "./pers/INPUTbug/"
-    path = folder+os.listdir(folder)[0]
-    msn.add_agentcard(folder,config,["TEST"],id_SN)
-    print(ext.pdf2text(path))
-    db.print_data(ext.extract_data(path))
+    folder = "./pers/INPUT/"
+    msn.add_agentcard(folder,config,["TEST"],id_SN) # DEBUG @ line 29,30  msn
 
 # add folder of cards
 if 0:
@@ -25,8 +22,6 @@ if 0:
     id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
     config = cf.get_config()
     msn.add_agentcard("./pers/INPUT/",config,["TEST"],id_SN)
-
-
 # upload note
 if 0:
     id =  cf.get_id()

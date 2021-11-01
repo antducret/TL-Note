@@ -3,7 +3,7 @@ import os
 import debug as db
 import construction as cn
 import config as cf
-import extraction as ex
+import extraction as ext
 import datetime as dt
 
 def add_break(date,type,config,tags,id_SN):
@@ -24,7 +24,11 @@ def add_agentcard(folder,config,tags,id_SN):
     pathfiles = sorted([f for f in os.listdir(folder) if f.endswith('.pdf')])
     for path in pathfiles :
         note,date = cn.construct_card(folder+"/"+path,config)
-        if note != "PAST": upload_note(note,date,tags,id_SN)
+        if note != "PAST":
+            upload_note(note,date,tags,id_SN)
+            #print(ext.pdf2text(folder+"/"+path)) #DEBUG
+            db.print_data(ext.extract_data(folder+"/"+path)) #DEBUG
+
 
 def upload_note(note,date,tags,id_SN):
     dict_note = dict()
@@ -32,12 +36,13 @@ def upload_note(note,date,tags,id_SN):
     if date.year == dt.datetime.today().year and note[0]!="-" : note = "-"+note
     dict_note["content"] = note
     dict_note["tags"] = ["TEST"] #TODO : Change to "tags" when ready to upload real data
-    if db.DEBUG :
-        print("\n----------------------------\n")
-        db.print_data(dict_note)
-        print("\n----------------------------\n")
     if cf.UPLOAD :
         id_SN.update_note(dict_note)
+
+def delete_test_note(id_SN): #NOT TESTED
+    all_notes = id_SN.get_note_list(data = False,tags="TEST")[0]
+    for note in all_notes:
+        id_SN.delete_note(note["key"])
 
 def outdate(id_SN):
     """ WIP:  delete all outdated notes """
