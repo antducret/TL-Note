@@ -19,14 +19,21 @@ tags = ["TEST"]#cf.get_tags()
 
 #   Simplenote id
 id = cf.get_id()
+print("Getting token...")
 id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
-
+print("Token OK !")
 #   Delete old notes
+print("Updating notes...")
 msn.outdate(id_SN)
+print("Update OK !")
+
 
 #   Interface
 sg.theme('Reddit')
+
 window = int.get_window()
+# Error performing wm_overrideredirect while hiding the hidden master root* expected boolean value but got ""
+
 while True:
     event, values = window.read()
     if event == sg.WIN_CLOSED:

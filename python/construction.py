@@ -9,8 +9,7 @@ def construct_break(date,t,config):
     d = cf.int2digit(date.day)
     m = cf.int2digit(date.month)
     logo = cf.get_logo("CONGE",config)
-    return "{}-{} {} {} \n\n {}".format(d,m,l,logo,t)
-
+    return "{}-{} {} {}  {}".format(d,m,l,logo,t)
 def construct_holiday(date,config):
     """ return a string named note formated for holiday day"""
     d = cf.int2digit(date.day)
@@ -18,7 +17,6 @@ def construct_holiday(date,config):
     l = ext.weekday(date)
     logo = cf.get_logo("VACANCE",config)
     return "{}-{} {} {}️".format(d,m,l,logo)
-
 def construct_holidays(date0,date1,config):
     """ return a list of notes formated for holiday days"""
     notes = []
@@ -27,7 +25,6 @@ def construct_holidays(date0,date1,config):
         notes.append(construct_holiday(date,config))
         date += dt.timedelta(days=1)
     return notes
-
 def isLogo(key,data,config):
     """ return a boolean to know if a specific logo must be added based on data of a day"""
     h_i = int(data["H_I"][0][:2])
@@ -55,13 +52,11 @@ def isLogo(key,data,config):
         "60":any(key in v_list for key in config["L60"]),
 
     }.get(key, False)
-
 def update_logo(logo,key,data,config):
     """ return a total logo with addition of specific logo if specific condition is ok """
     if isLogo(key,data,config):
         logo += cf.get_logo(key,config)
     return logo
-
 def make_logo(data,config):
     """ return a total logo for a specific note of a specific date"""
     logo = ""
@@ -69,7 +64,6 @@ def make_logo(data,config):
     for key in keys_good_order:
         logo = update_logo(logo,key,data,config)
     return logo
-
 def make_title(data,config):
     """ return a note title with this format : MM-DD WEEKDAY_LETTER LOGO START_HOUR START_PLACE    """
     month = cf.int2digit(data["MONTH"])
@@ -78,7 +72,6 @@ def make_title(data,config):
     logo = make_logo(data, config)
     title = "{} {} {} {} {}\n".format(M_D,data["WEEKDAY"],logo,data["H_I"][0],data["L_I"][0])
     return title
-
 def make_summary(data,config):
     """ return a summary of the day with this format :
     -----
@@ -100,7 +93,6 @@ def make_summary(data,config):
     else: summary = "_SUMMARY_INFEASIBLE"
 
     return summary
-
 def sort_lines(data):
     """ return a list of lines in chronologic order """
     d_h = data["DOUBLE_HOUR"]
@@ -118,12 +110,11 @@ def make_details(data,config):
         if "Coupure" in lines[i] or "Interruption" in lines[i]: # Retour à la ligne avant-après breakline + Nextvoiture
             copylines[i] = "\n"+lines[i]+"\n\n"+"Voiture "+data["CAR"][k]
             k += 1
-        if "/" in lines[i]: # Retour à la ligne entre voiture/numéro et dotline
+        if re.search("\d+\s*/\s*\d+\s+",lines[i]) != None: # Retour à la ligne entre voiture/numéro et dotline
             carnum = re.search("\d+\s*/\s*\d+\s+",lines[i])[0]
             copylines[i] = carnum+"\n"+re.sub("\d+\s*/\s*\d+\s+","",lines[i])
     details = "\n".join(copylines)
     return details
-
 def construct_card(path,config):
     """ return a note (string) from pdf file to upload on simplenote """
     data = ext.extract_data(path)
