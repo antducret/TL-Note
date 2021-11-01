@@ -7,9 +7,11 @@ import moresimplenote as msn
 import PySimpleGUI as sg
 import simplenote as sn
 import webbrowser as web
+import os
 
 
 # MAIN
+os.chdir('/Applications/TL-Note')
 
 #   Initialize config and tags
 config = cf.get_config()
