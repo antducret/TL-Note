@@ -13,7 +13,7 @@ import webbrowser as web
 
 #   Initialize config and tags
 config = cf.get_config()
-tags = cf.get_tags()
+tags = ["TEST"]#cf.get_tags()
 
 #   Simplenote id
 id = cf.get_id()

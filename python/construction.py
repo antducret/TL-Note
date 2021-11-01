@@ -101,9 +101,28 @@ def make_summary(data,config):
 
     return summary
 
+def sort_lines(data):
+    """ return a list of lines in chronologic order """
+    d_h = data["DOUBLE_HOUR"]
+    breakword = data["KEYWORD"]
+    breakline = [ breakword[i]+"\t\t"+d_h[i] for i in range(len(d_h))]
+    list = data["DOTLINE"] + breakline
+    list = sorted(list, key = lambda x: x[-5:])
+    return list
 def make_details(data,config):
-    """ WIP : return a string of the detailed information of a specific date"""
-    return "_DETAILS_"
+    """ return a string of the detailed information of a specific date"""
+    lines = ["Voiture "+data["CAR"][0]]+sort_lines(data)
+    copylines = lines.copy()
+    k = 1
+    for i in range(len(lines)) :
+        if "Coupure" in lines[i] or "Interruption" in lines[i]: # Retour à la ligne avant-après breakline + Nextvoiture
+            copylines[i] = "\n"+lines[i]+"\n\n"+"Voiture "+data["CAR"][k]
+            k += 1
+        if "/" in lines[i]: # Retour à la ligne entre voiture/numéro et dotline
+            carnum = re.search("\d+\s*/\s*\d+\s+",lines[i])[0]
+            copylines[i] = carnum+"\n"+re.sub("\d+\s*/\s*\d+\s+","",lines[i])
+    details = "\n".join(copylines)
+    return details
 
 def construct_card(path,config):
     """ return a note (string) from pdf file to upload on simplenote """

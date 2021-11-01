@@ -9,12 +9,12 @@ import os
 
 
 # control a particular pdf file
-if 1:
+if 0:
     id =  cf.get_id()
     id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
     config = cf.get_config()
     folder = "./pers/INPUT/"
-    msn.add_agentcard(folder,config,["TEST"],id_SN) # DEBUG @ line 29,30  msn
+    msn.add_agentcard(folder,config,["TEST"],id_SN)
 
 # add folder of cards
 if 0:

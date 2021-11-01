@@ -26,16 +26,13 @@ def add_agentcard(folder,config,tags,id_SN):
         note,date = cn.construct_card(folder+"/"+path,config)
         if note != "PAST":
             upload_note(note,date,tags,id_SN)
-            #print(ext.pdf2text(folder+"/"+path)) #DEBUG
-            db.print_data(ext.extract_data(folder+"/"+path)) #DEBUG
-
 
 def upload_note(note,date,tags,id_SN):
     dict_note = dict()
     dict_note["key"] = date.strftime("%d_%m_%Y")
     if date.year == dt.datetime.today().year and note[0]!="-" : note = "-"+note
     dict_note["content"] = note
-    dict_note["tags"] = ["TEST"] #TODO : Change to "tags" when ready to upload real data
+    dict_note["tags"] = tags
     if cf.UPLOAD :
         id_SN.update_note(dict_note)
 

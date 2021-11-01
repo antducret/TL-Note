@@ -1,7 +1,7 @@
 import csv
 import emoji
 
-UPLOAD = 0
+UPLOAD = 1
 CONFIG_FILE = "./config/config.csv"
 ID_FILE = "./pers/id.csv"
 TAGS_FILE = "./pers/tags.csv"

@@ -16,7 +16,6 @@ def pdf2text(path):
 def extract_data(path):
     """ extract all data from a pdf returning a dictionary """
     txt = pdf2text(path)
-    #print("\n\n-----TXT-----\n"+txt+"\n")
     data = dict()
 
     # Date information
@@ -94,7 +93,4 @@ def extract_data(path):
     data["TAB"] = [x for x in txt.split("\n") if x not in [""," ","\n","\n "]]
     data["SOURCE"] = re.search('\d{2}/\d{2}/\d{4} \d{2}:\d{2}', [x for x in txt.split("\n") if "HASTUS" in x][0])[0]
 
-    #print("\n-----DATA-----\n")
-    #db.print_data(data)
-    #print("\n")
     return data
