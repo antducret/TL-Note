@@ -5,6 +5,7 @@ import construction as cn
 import config as cf
 import extraction as ext
 import datetime as dt
+import re
 
 def add_break(date,type,config,tags,id_SN):
     """ call upload for a note for breakday on simple note"""
@@ -73,4 +74,15 @@ def update(id_SN):
                     dict_note["content"] = "-"+dict_note["content"]
                     id_SN.update_note(dict_note)
                     print("\t\t",note["key"],"new year : begin with \"-\" ")
+        else :
+            dict_note = id_SN.get_note(note["key"])[0]
+            txt = dict_note["content"]
+            if (re.search("\d+/\d{2}/\d{4}",txt) != None):
+                newkey = re.search("\d+/\d{2}/\d{4}",txt)[0].replace("/","_")
+                dict_note["key"] = newkey
+                if "TEST" not in dict_note["tags"]: dict_note["tags"] = cf.get_tags()
+                id_SN.delete_note(note["key"])
+                print(dict_note["key"])
+                id_SN.update_note(dict_note)
+                print("\t\t",dict_note["key"],"conversion of key to programm format")
     print("\tDone")
