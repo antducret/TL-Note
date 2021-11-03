@@ -6,7 +6,7 @@ BUG : New line in P,H,L data corrupt data
   - For :
     - 29-01-2022
     - 02-02-2022
-    - 16-02-2022 
+    - 16-02-2022
   - Collect data even if newline
   - Uncorrupt data ?
 

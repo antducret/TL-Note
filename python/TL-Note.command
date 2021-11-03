@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 # IMPORT
+import debug as db
 import config as cf
 import interface as int
 import moresimplenote as msn
@@ -15,25 +16,26 @@ os.chdir('/Applications/TL-Note')
 
 #   Initialize config and tags
 config = cf.get_config()
-tags = ["TEST"]#cf.get_tags()
+tags = ["TEST"] if db.DEBUG else cf.get_tags()
 
 #   Simplenote id
+print("TL-Note started")
+print("Getting id ...",end = " ")
 id = cf.get_id()
-print("Getting token...")
 id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
-print("Token OK !")
-#   Delete old notes
-print("Updating notes...")
-msn.outdate(id_SN)
-print("Update OK !")
+print("Done")
+print("Getting token ...",end=" ")
+id_SN.token = id_SN.authenticate(id["ID"][0],id["PW"][0]) # Necessary ?
+print("Done")
+#   Delete old notes and add "-" for actual year notes
+msn.update(id_SN)
+msn.delete_test_note(id_SN)
+print("Ready !")
 
 
 #   Interface
 sg.theme('Reddit')
-
-window = int.get_window()
-# Error performing wm_overrideredirect while hiding the hidden master root* expected boolean value but got ""
-
+window = int.get_window() # Error performing wm_overrideredirect while hiding the hidden master root* expected boolean value but got ""
 while True:
     event, values = window.read()
     if event == sg.WIN_CLOSED:

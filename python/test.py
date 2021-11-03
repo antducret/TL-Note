@@ -7,13 +7,13 @@ import moresimplenote as msn
 import simplenote as sn
 import os
 
-
+id =  cf.get_id()
+id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
+id_SN.token = id_SN.authenticate(id["ID"][0],id["PW"][0])
+config = cf.get_config()
+folder = "./pers/INPUT/"
 # control a particular pdf file
-if 0:
-    id =  cf.get_id()
-    id_SN = sn.Simplenote(id["ID"][0],id["PW"][0])
-    config = cf.get_config()
-    folder = "./pers/INPUT/"
+if 1:
     msn.add_agentcard(folder,config,["TEST"],id_SN)
 
 # add folder of cards

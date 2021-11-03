@@ -98,7 +98,9 @@ def sort_lines(data):
     d_h = data["DOUBLE_HOUR"]
     breakword = data["KEYWORD"]
     breakline = [ breakword[i]+"\t\t"+d_h[i] for i in range(len(d_h))]
-    list = data["DOTLINE"] + breakline
+    list = data["DOTLINE"]
+    list = sorted(list, key = lambda x: x[-5:])
+    list += breakline
     list = sorted(list, key = lambda x: x[-5:])
     return list
 def make_details(data,config):
