@@ -10,6 +10,8 @@ import simplenote as sn
 import webbrowser as web
 import os
 
+# Install packages
+
 
 # MAIN
 os.chdir('/Applications/TL-Note')

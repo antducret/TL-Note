@@ -1,5 +1,6 @@
 # ESSENTIAL :
-- handmade note inclusion-- > change key to dd_mm_yyyy format
+- handmade note inclusion-- > change key to dd_mm_yyyy format A controler
+- packages -->requirements-files et limite to functions
 - 3car day inclusion
 - annulation du dernier ajout
 - moto logo
@@ -17,3 +18,5 @@
 # MAY BE ADDED : code esthetic and speed execution tasks
 - Optimisation utilisation des constantes ID,ID_SN,CONFIG,TAGS
 - Traitement des conditions jours/voiture dans une condition ??
+- Application android
+- POO mais oû ?
